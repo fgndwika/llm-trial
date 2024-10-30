@@ -1,0 +1,91 @@
+<div class="input-page">
+  <div class="form-group">
+    <label for="apiKey">API Key:</label>
+    <input 
+      type="text" 
+      id="apiKey" 
+      [(ngModel)]="apiKey" 
+      placeholder="Enter your API key"
+      class="form-control"
+    >
+    <button (click)="initializeOpenAI()" class="initialize-btn">Initialize</button>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Hide everything below until initialized -->
+  <ng-container *ngIf="isInitialized">
+    <div class="form-group">
+      <label for="prompt">What do you want to do?</label>
+      <textarea 
+        id="prompt" 
+        [(ngModel)]="prompt" 
+        placeholder="Explain what you want your JSON logic to do"
+        class="form-control"
+        rows="4"
+      ></textarea>
+      <button (click)="generateExamples()" class="generate-btn">Generate Example(s)</button>
+    </div>
+
+    <div class="examples-section">
+      <h3>Examples</h3>
+      <div class="loading-spinner" *ngIf="isLoading">Loading...</div>
+      <table class="examples-table">
+        <thead>
+          <tr>
+            <th>Input</th>
+            <th>Output</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let example of examples">
+            <td>
+              <input 
+                type="text" 
+                [ngModel]="example.input" 
+                (ngModelChange)="example.input = $event"
+                placeholder="Input example"
+                class="form-control"
+              >
+            </td>
+            <td>
+              <input 
+                type="text" 
+                [ngModel]="example.output" 
+                (ngModelChange)="example.output = $event"
+                placeholder="Output example"
+                class="form-control"
+              >
+            </td>
+            <td class="action-column">
+              <button 
+                class="delete-btn" 
+                (click)="deleteExample(example)"
+                aria-label="Delete example"
+              >
+                ✕
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button (click)="addExample()" class="add-example-btn">Add Example</button>
+    </div>
+
+    <button 
+      (click)="onSubmit()" 
+      class="submit-btn"
+      [disabled]="isLoading"
+    >
+      {{ isLoading ? 'Processing...' : 'Go!' }}
+    </button>
+
+    <div class="result-section" *ngIf="jsonLogic">
+      <h3>Generated JSON Logic</h3>
+      <pre>{{ jsonLogic }}</pre>
+    </div>
+  </ng-container>
+</div> 
