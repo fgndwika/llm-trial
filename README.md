@@ -10,3 +10,5 @@ Create json logic rule (https://jsonlogic.com/) from plain natural language.
 1. clone
 2. `npm install`
 3. `npm start`
+
+Note: You need to provide your own OpenAI API key to run this
